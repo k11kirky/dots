@@ -1,9 +1,10 @@
-import { clearChats, getChats, getUsers } from '@/app/actions'
+import { clearUsers, getChats, getUsers } from '@/app/actions'
 import { ClearHistory } from '@/components/clear-history'
 import { SidebarItems } from '@/components/sidebar-items'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { cache } from 'react'
 import { SidebarUserItems } from './sidebar-user-items'
+import { ClearUsers } from './clear-users'
 
 interface SidebarListProps {
   userId?: string
@@ -33,7 +34,7 @@ export async function SidebarUserList({ userId }: SidebarListProps) {
       <div className="flex items-center justify-between p-4">
         <ThemeToggle />
         {/* Clear user info */}
-        {/* <ClearHistory clearChats={clearChats} isEnabled={chats?.length > 0} /> */}
+        <ClearUsers clearUsers={clearUsers} isEnabled={users?.length > 0} />
       </div>
     </div>
   )

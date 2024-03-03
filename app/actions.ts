@@ -41,11 +41,18 @@ export async function getUsers(userId?: string | null) {
       rev: true
     })
 
+    console.log("users", users)
+    if (users.length == 0) {
+      return []
+    }
+
     for (const user of users) {
       pipeline.hgetall(user)
     }
 
     const results = await pipeline.exec()
+
+    console.log("results", results)
 
     return results as Subject[]
   } catch (error) {
