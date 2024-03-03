@@ -1,7 +1,7 @@
 ## What we built!
 
 ## Problem 
-In the fast-paced world of networking, making meaningful connections is key to professional growth. That's why our team, during the 48-hour whirlwind of innovation known as our Hackathon, developed ContactBot: a chatbot designed to revolutionize the way professionals manage and expand their networks.
+In the fast-paced world of networking, making meaningful connections is key to professional growth. That's why our team, during the 48-hour whirlwind of innovation known as our Hackathon, developed Dots: a chatbot designed to revolutionize the way professionals manage and expand their networks.
 
 ## The Challenge
 We recognized a common problem among professionals: the difficulty in tracking details about new contacts and leveraging existing networks to meet potential collaborators or clients. Our challenge was to create a solution that not only helps users manage their growing list of contacts but also intelligently recommends new connections based on shared interests, goals, and mutual contacts.
