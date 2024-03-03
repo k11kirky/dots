@@ -1,3 +1,15 @@
+## What we built!
+
+## Problem 
+In the fast-paced world of networking, making meaningful connections is key to professional growth. That's why our team, during the 48-hour whirlwind of innovation known as our Hackathon, developed ContactBot: a chatbot designed to revolutionize the way professionals manage and expand their networks.
+
+## The Challenge
+We recognized a common problem among professionals: the difficulty in tracking details about new contacts and leveraging existing networks to meet potential collaborators or clients. Our challenge was to create a solution that not only helps users manage their growing list of contacts but also intelligently recommends new connections based on shared interests, goals, and mutual contacts.
+
+## Contact Information Storage
+After every meeting or networking event, you can tell Dots about the new people you've met. This information is securely stored and easily retrievable. Using Redis. 
+
+
 <img width="1270" alt="Screen Shot 2024-03-03 at 12 08 46 AM" src="https://github.com/k11kirky/dots/assets/25588954/c13514f8-2578-4b5c-9c46-a99621a3d017"><a>
   <h1 align="center">CONTACT LIST IN MEMORY</h1>
 </a>
@@ -14,8 +26,6 @@
   <a href="#authors"><strong>Authors</strong></a>
 </p>
 <br/>
-
-## Features
 
 ## Model Providers
 -Gemini
