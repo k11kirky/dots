@@ -3,34 +3,28 @@ import { OpenAIStream, StreamingTextResponse } from 'ai'
 // import OpenAI from 'openai'
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GoogleGenerativeAIStream, StreamingTextResponse } from 'ai';
- 
+import { useCompletion } from 'ai/react';
+
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
-
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 export const runtime = 'edge'
 
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY
-// })
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
-
-export async function POST(req: Request) {
-  // Extract the `prompt` from the body of the request
-  const { prompt } = await req.json();
  
-  // Ask Google Generative AI for a streaming completion given the prompt
+export async function POST(req: Request) {
+  // Extract the `messages` from the body of the request
+  const { messages } = await req.json();
+ 
+  // Ask Google Generative AI for a streaming completion given the messages
   const res = await genAI
     .getGenerativeModel({ model: 'gemini-pro' })
     .generateContentStream({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      contents: [{ role: 'user', parts: [{ text: messages }] }],
     });
  
   // Convert the response into a friendly text-stream
-  const stream = GoogleGenerativeAIStream(res);
- 
-
-  const stream = OpenAIStream(res, {
-    async onCompletion(completion) {
+  const stream = GoogleGenerativeAIStream(res, {
+   async onCompletion(completion) {
       const title = json.messages[0].content.substring(0, 100)
       const id = json.id ?? nanoid()
       const createdAt = Date.now()
@@ -54,8 +48,7 @@ export async function POST(req: Request) {
         score: createdAt,
         member: `chat:${id}`
       })
-    }
-  })
-
+    }});
+     
   return new StreamingTextResponse(stream)
 }
