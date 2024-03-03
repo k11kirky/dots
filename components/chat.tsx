@@ -50,7 +50,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
           toast.error(response.statusText)
         }
         // TODO clear chat
-      },
+      }
     })
   return (
     <>

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 
 import { auth } from '@/auth'
-import { type Chat } from '@/lib/types'
+import { Subject, type Chat } from '@/lib/types'
 
 export async function getChats(userId?: string | null) {
   if (!userId) {
@@ -47,14 +47,14 @@ export async function getUsers(userId?: string | null) {
 
     const results = await pipeline.exec()
 
-    return results as Chat[]
+    return results as Subject[]
   } catch (error) {
     return []
   }
 }
 
 export async function getUser(id: string, userId: string) {
-  const chat = await kv.hgetall<Chat>(`subject:${id}`)
+  const chat = await kv.hgetall<Subject>(`subject:${id}`)
 
   if (!chat || (userId && chat.userId !== userId)) {
     return null
@@ -105,7 +105,7 @@ export async function clearChats() {
     return {
       error: 'Unauthorized'
     }
-  }
+  }``
 
   const chats: string[] = await kv.zrange(`user:chat:${session.user.id}`, 0, -1)
   if (!chats.length) {
