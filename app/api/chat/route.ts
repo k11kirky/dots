@@ -1,30 +1,34 @@
 import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
-import OpenAI from 'openai'
-
+// import OpenAI from 'openai'
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAIStream, StreamingTextResponse } from 'ai';
+ 
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-})
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY
+// })
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
 export async function POST(req: Request) {
-  const json = await req.json()
-  const { messages, previewToken } = json
-  const userId = (await auth())?.user.id
+  // Extract the `prompt` from the body of the request
+  const { prompt } = await req.json();
+ 
+  // Ask Google Generative AI for a streaming completion given the prompt
+  const response = await genAI
+    .getGenerativeModel({ model: 'gemini-pro' })
+    .generateContentStream({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+    });
+ 
+  // Convert the response into a friendly text-stream
+  const stream = GoogleGenerativeAIStream(response);
+ 
 
-  if (!userId) {
-    return new Response('Unauthorized', {
-      status: 401
-    })
-  }
-
-  if (previewToken) {
-    openai.apiKey = previewToken
-  }
 
   const res = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
