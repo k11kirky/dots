@@ -30,6 +30,39 @@ export async function getChats(userId?: string | null) {
   }
 }
 
+export async function getUsers(userId?: string | null) {
+  if (!userId) {
+    return []
+  }
+
+  try {
+    const pipeline = kv.pipeline()
+    const users: string[] = await kv.zrange(`user:subject:${userId}`, 0, -1, {
+      rev: true
+    })
+
+    for (const user of users) {
+      pipeline.hgetall(user)
+    }
+
+    const results = await pipeline.exec()
+
+    return results as Chat[]
+  } catch (error) {
+    return []
+  }
+}
+
+export async function getUser(id: string, userId: string) {
+  const chat = await kv.hgetall<Chat>(`subject:${id}`)
+
+  if (!chat || (userId && chat.userId !== userId)) {
+    return null
+  }
+
+  return chat
+}
+
 export async function getChat(id: string, userId: string) {
   const chat = await kv.hgetall<Chat>(`chat:${id}`)
 
@@ -83,6 +116,32 @@ export async function clearChats() {
   for (const chat of chats) {
     pipeline.del(chat)
     pipeline.zrem(`user:chat:${session.user.id}`, chat)
+  }
+
+  await pipeline.exec()
+
+  revalidatePath('/')
+  return redirect('/')
+}
+
+export async function clearUsers() {
+  const session = await auth()
+
+  if (!session?.user?.id) {
+    return {
+      error: 'Unauthorized'
+    }
+  }
+
+  const users: string[] = await kv.zrange(`user:subject:${session.user.id}`, 0, -1)
+  if (!users.length) {
+    return redirect('/')
+  }
+  const pipeline = kv.pipeline()
+
+  for (const user of users) {
+    pipeline.del(user)
+    pipeline.zrem(`user:subject:${session.user.id}`, user)
   }
 
   await pipeline.exec()
