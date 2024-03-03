@@ -19,23 +19,15 @@ export async function POST(req: Request) {
   const { prompt } = await req.json();
  
   // Ask Google Generative AI for a streaming completion given the prompt
-  const response = await genAI
+  const res = await genAI
     .getGenerativeModel({ model: 'gemini-pro' })
     .generateContentStream({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     });
  
   // Convert the response into a friendly text-stream
-  const stream = GoogleGenerativeAIStream(response);
+  const stream = GoogleGenerativeAIStream(res);
  
-
-
-  const res = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages,
-    temperature: 0.7,
-    stream: true
-  })
 
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
